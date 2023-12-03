@@ -18,7 +18,7 @@ export const AuthContextProvider = ({ children }) => {
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
-  })
+  });
 
   useEffect( () => {
     const user = localStorage.getItem("user")
@@ -59,8 +59,7 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(response));
     setUser(response);
   }, [registerInfo]);
-
-  console.log(loginInfo);
+  
   const loginUser = useCallback( async (e) => {
     e.preventDefault()
 
@@ -78,7 +77,7 @@ export const AuthContextProvider = ({ children }) => {
       return setLoginError(response);
     }
 
-    localStorage.setItem("user", JSON.parse(response))
+    localStorage.setItem("user", JSON.stringify(response))
     setUser(response)
 
   }, [loginInfo])
@@ -96,7 +95,8 @@ export const AuthContextProvider = ({ children }) => {
         loginUser,
         updateLoginInfo,
         loginError,
-        isLoginLoading
+        isLoginLoading,
+        loginInfo
       }}
     >
       {children}
