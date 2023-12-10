@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
 import { userFetchRecipientUser } from "../../hooks/userFetchRecipient";
@@ -17,8 +17,17 @@ const ChatBox = () => {
   } = useContext(ChatContext);
   const { recipientUser } = userFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
+  const scroll = useRef()
 
   console.log(textMessage);
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({behavior: "smooth"})
+  }, [messages])
+
+  if (!user) {
+    return <p style={{ textAlign: "center", width: "100%" }}>Loading user...</p>
+  }
 
   if (!recipientUser)
     return (
@@ -47,6 +56,7 @@ const ChatBox = () => {
                   ? "message self align-self-end flex-grow-0"
                   : "message align-self-start flex-grow-0"
               }`}
+              ref={scroll}
             >
               <span>{message.text}</span>
               <span className="message-footer">
